@@ -10,6 +10,8 @@ class Node
 	 *	add_node($data, $table, $target_pos, $target_id)
 
 	 *	delete_node($id, $table, $recursive = TRUE)
+	 
+	 *  delete_shift_node($id, $table)
 
 	 *	update_node($id, $table, $target_pos, $target_id, $data)
 
@@ -216,7 +218,7 @@ class Node
 			$this->CI->db->query($sql);
 			
 			//shift all descendants up
-			$sql = "UPDATE `".$table."` SET level=level-1 ".
+			$sql = "UPDATE `".$table."` SET `level`=`level`-1 ".
 					"WHERE lft BETWEEN ".$node->lft." AND ".$node->rght.";";
 			$this->CI->db->query($sql);
 			
@@ -358,7 +360,7 @@ class Node
 
 		// we've got the left value, and now that we've processed  
 		// the children of this node we also know the right value  
-		$sql = "UPDATE `".$table."` SET lft=".$left.", rght=".$right.", level =".$i." ".
+		$sql = "UPDATE `".$table."` SET lft=".$left.", rght=".$right.", `level` =".$i." ".
 				"WHERE id=".$parent->id.";";
 		$this->CI->db->query($sql);  
 

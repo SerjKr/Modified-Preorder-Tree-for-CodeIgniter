@@ -1,0 +1,135 @@
+This class called Node allows for creating and maintaining hierarchical sql data.
+It uses the Modified Preorder Tree model, and fetches an entire tree with just one query.
+
+It allows to:
+  add new nodes
+  update existing nodes (includes repositioning nodes/branches)
+  delete nodes (with or without descendants)
+
+Note: If you already have a table with hierarchical data, in the Adjacency List format you can (re)format this
+to the MPT format, see below.
+
+Where to place the file:
+  /application/libraries
+
+Requirements:
+  Your table will need the following columns to work with this library.
+  lft, rght, parent, level
+
+  You can use the following SQL to add these columns to your existing table:
+
+ALTER TABLE `table` ADD  (lft INT NOT NULL,
+                         rght INT NOT NULL,
+                         parent INT NOT NULL,
+                         level INT NOT NULL),
+                    ADD INDEX ( lft, rght );
+
+If you already have your data in the Adjancy List format. Make sure that the column that references the parent is called `parent`. You will only need to add these columns:
+ALTER TABLE `table` ADD  (lft INT NOT NULL,
+                         rght INT NOT NULL,
+                         level INT NOT NULL),
+                    ADD INDEX ( lft, rght );
+                    
+Loading the Node class:
+  $this->load->library('node');
+  or autoload it in /application/config/autoload.php
+  
+Available Methods:
+	 *	get_tree($table, $lft = 1, $rght = null)
+      
+      - this function gets the tree for a given table
+      - between the given lft and rght values.
+      
+      - only $table is required;
+      
+      - if $rght is left undefined it will get the maximum rght value
+      
+
+	
+	 *	get_node_kin($id, $table)
+	 
+	    - get a node with information of its closest relative to the left (kin)
+	    - this kin can be a sibling, or if no siblings exist to the left a parent
+	 
+	    - Returns the target node as on object, with its columns as its properties
+	    - in addition two properties are returned namely "target" and "kin"
+	    
+	    - target references wether it is placed "after", or "under" its kin, in other words
+	    - if it's nearest item to the left is a sibling or a parent.
+	    
+      - kin references the id of the kin.
+      
+
+
+	 *	add_node($data, $table, $target_pos, $target_id)
+	 
+	     - Adds a node to the tree
+	     - $data: the data to be inserted in the format of an assoc. array
+	     - $table: the name of your table
+	     - $target_pos: where the new node is placed in relation to the target node
+	          "before" | "after" | "under"
+	     - $target_id: id of the target node
+	     
+	     - Nodes are inserted into a target position. This target position is another node.
+	     - Therefore you need to specify if you wish to insert this node after, before
+	     - or under the target item.
+	     
+
+	 *	delete_node($id, $table)
+	 
+	    - this method deletes a node and its descendants, if you want to keep
+	    - the descendants use the method delete_shift_node instead, see below.
+	    
+	    - $id: id of the node to be deleted
+	    - $table: the name of the table
+	 
+	 
+
+	 *  delete_shift_node($id, $table)
+	    - Deletes a node, keepts the descendants, and shifts the descendants one level up
+	    
+	    - $id: id of the node to be deleted
+	    - $table: name of the table
+
+
+
+	 *	update_node($id, $table, $target_pos, $target_id, $data)
+	    - updated an existing node
+	    - $id: id of the node
+	    - $table: name of the table
+	    - $target_pos: where the new node is placed in relation to the target node
+	          "before" | "after" | "under"
+	     - $target_id: id of the target node
+	     - $data: the data to be inserted into the database as an assoc. array
+	     
+	     - Nodes are positioned in relation to a target node.
+	     - Therefore you need to specify wether you wish to position this node after, before
+	     - or under the target item.
+
+
+
+	 *	rebuild_tree($table, $parent_id=null, $left=1, $i=-1)		
+        - Build or rebuild an existing table into the correct MPT format.
+        - only $table is required.
+        - $table: name of the table
+        
+        
+        
+Usage examples:
+  Formatting an existing Adjacancy List table into the MPT format (using the `parent` column)
+    $table = "my_table";
+    $this->node->rebuild_tree($table);
+  
+  Adding an item to this table
+    $table = "my_table";
+    $data = array(
+      'column1' => 'Lorem',
+      'column2' => 'Ipsum'
+    );
+    $target_pos = "under";
+    $target_id = 1;
+    $this->node->add_node($data, $table, $target_pos, $target_id);
+    
+    Typically you would use a form to fill these variables.
+    E.g. $data['column1'] = $this->input->post('column1');
+  
