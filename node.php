@@ -2,21 +2,21 @@
 class Node
 {
     /** 
-     *  A class for hierarchical data in MPT format.
-	 *	@method array   get_tree($table, $lft = 1, $rght = null)
-	 *	@method object  get_node_kin($id, $table)//retrieve a node with it's kin
-	 *	@method         add_node($data, $table, $target_pos, $target_id)
-	 *  @method         delete_node($id, $table, $first_time = TRUE)
-	 *  @method         delete_shift_node($id, $table)
-	 *	@method         update_node($id, $table, $target_pos, $target_id, $data)
-	 *	@method         rebuild_tree($table, $parent_id=null, $left=1, $i=-1)
-	 */
-	
-	/**
-	 * inialize the CI instance, so we can use the database functionality
-	 * since it is otherwise not accessibly from within this class
-	 * note: to call the database class from here use, $this->CI->db
-	 */
+     * A class for hierarchical data in MPT format.
+     * @method array   get_tree($table, $lft = 1, $rght = null)
+     * @method object  get_node_kin($id, $table)//retrieve a node with it's kin
+     * @method         add_node($data, $table, $target_pos, $target_id)
+     * @method         delete_node($id, $table, $first_time = TRUE)
+     * @method         delete_shift_node($id, $table)
+     * @method         update_node($id, $table, $target_pos, $target_id, $data)
+     * @method         rebuild_tree($table, $parent_id=null, $left=1, $i=-1)
+     */
+
+    /**
+     * inialize the CI instance, so we can use the database functionality
+     * since it is otherwise not accessibly from within this class
+     * note: to call the database class from here use, $this->CI->db
+     */
 	private $CI;
 	function Node()
 	{
@@ -34,9 +34,9 @@ class Node
 	 */
 	function get_tree($table, $lft = 1, $rght = null)
 	{
-	    /**
-		 * if no rght parameter is given get max
-		 */
+        /**
+         * if no rght parameter is given get max
+         */
 		if($rght === null)
 		{
 			$sql = "SELECT rght from `".$table."`".
