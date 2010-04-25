@@ -73,8 +73,8 @@ class Node
 		 */
         
         /**
-		 * retrieve node
-		 */
+         * retrieve node
+         */
 		$this->CI->db->where('id', $id);
 		$query = $this->CI->db->get($table);
 		$node = $query->row();
@@ -179,10 +179,10 @@ class Node
 
     /**
      * Deletes an item and its descendants
-	 * it will get all descendants the first time around.
-	 * @param $id    The id of the node
-	 * @param $table Name of the table 
-	 */
+     * it will get all descendants the first time around.
+     * @param $id    The id of the node
+     * @param $table Name of the table 
+     */
 	function delete_node($id, $table, $first_time = TRUE)
 	{
 		
@@ -321,12 +321,12 @@ class Node
 
     /**
      * @param $id            id of node to update
-	 * @param $table         Name of the table in which the node resides
-	 * @param $target_pos    Where node is placed in relation to the target node
-	 * @param $target_id     id of the target node
-	 * @param $data          The data with which to update the node in the table
-	 * @param $current_state The current information of the item in object format
-	 */
+     * @param $table         Name of the table in which the node resides
+     * @param $target_pos    Where node is placed in relation to the target node
+     * @param $target_id     id of the target node
+     * @param $data          The data with which to update the node in the table
+     * @param $current_state The current information of the item in object format
+     */
 	function update_node($id, $table, $target_pos, $target_id, $data)
 	{
 		
